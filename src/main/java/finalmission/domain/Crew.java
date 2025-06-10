@@ -47,6 +47,10 @@ public class Crew {
         return tier.getName();
     }
 
+    public int getTierWeight() {
+        return tier.getWeight();
+    }
+
     public String getLine() {
         return line.getLine();
     }

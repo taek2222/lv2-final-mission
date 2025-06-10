@@ -8,8 +8,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Team {
 
     @Id
@@ -25,9 +33,16 @@ public class Team {
     private String phoneNumber;
 
     @OneToMany
-    private List<Crew> members;
+    @JoinColumn
+    private List<Crew> crews;
 
-    private Tier AverageTier;
+    private Tier averageTier;
 
-    private List<CivilWarDateTime> possibleDateTime;
+    @OneToMany
+    @JoinColumn
+    private List<CivilWarSchedule> possibleSchedule;
+
+    public String getAverageTier() {
+        return averageTier.getName();
+    }
 }
