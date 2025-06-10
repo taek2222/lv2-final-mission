@@ -1,11 +1,13 @@
 package finalmission.controller;
 
 import finalmission.controller.dto.request.TeamCreateRequest;
-import finalmission.controller.dto.response.TeamInfoResponse;
+import finalmission.controller.dto.response.TeamDetailResponse;
 import finalmission.service.TeamService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,14 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("v1/team")
+@RequestMapping("v1/teams")
 public class TeamController {
 
     private final TeamService teamService;
 
+    @GetMapping("/all")
+    public List<TeamDetailResponse> getAllTeam() {
+        return teamService.getAllTeam();
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TeamInfoResponse createTeam(@RequestBody TeamCreateRequest request) {
+    public TeamDetailResponse createTeam(@RequestBody TeamCreateRequest request) {
         return teamService.saveTeam(request);
     }
 

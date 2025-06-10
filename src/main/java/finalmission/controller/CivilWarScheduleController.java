@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/civil-war-date")
+@RequestMapping("/v1/civil-war-dates")
 public class CivilWarScheduleController {
 
     private final CivilWarScheduleService civilWarScheduleService;

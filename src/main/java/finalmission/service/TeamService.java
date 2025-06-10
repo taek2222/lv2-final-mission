@@ -1,7 +1,7 @@
 package finalmission.service;
 
 import finalmission.controller.dto.request.TeamCreateRequest;
-import finalmission.controller.dto.response.TeamInfoResponse;
+import finalmission.controller.dto.response.TeamDetailResponse;
 import finalmission.domain.CivilWarSchedule;
 import finalmission.domain.Crew;
 import finalmission.domain.Team;
@@ -16,13 +16,17 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class TeamService {
-
     private final CivilWarScheduleRepository civilWarScheduleRepository;
+
     private final CrewRepository crewRepository;
     private final TeamRepository teamRepository;
     private final SmsService smsService;
 
-    public TeamInfoResponse saveTeam(TeamCreateRequest request) {
+    public List<TeamDetailResponse> getAllTeam() {
+        List<Team> teams = teamRepository.findAll();
+    }
+
+    public TeamDetailResponse saveTeam(TeamCreateRequest request) {
         // 리더 탐색
         Crew leader = getCrewById(request.leaderId());
 
@@ -55,7 +59,7 @@ public class TeamService {
 
         teamRepository.save(saveTeam);
         smsService.sendTeamCreateMessage(saveTeam.getPhoneNumber());
-        return new TeamInfoResponse(saveTeam);
+        return new TeamDetailResponse(saveTeam);
     }
 
     public void deleteTeam(Long teamId) {

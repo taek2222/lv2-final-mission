@@ -5,7 +5,7 @@ import finalmission.domain.Crew;
 import finalmission.domain.Team;
 import java.util.List;
 
-public record TeamInfoResponse(
+public record TeamDetailResponse(
         Long id,
         String name,
         CrewInfoResponse leader,
@@ -15,7 +15,7 @@ public record TeamInfoResponse(
         List<CivilWarScheduleInfoResponse> possibleSchedule
 ) {
 
-    public TeamInfoResponse(Team team) {
+    public TeamDetailResponse(Team team) {
         this(
                 team.getId(),
                 team.getName(),
