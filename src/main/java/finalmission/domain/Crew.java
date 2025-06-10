@@ -31,9 +31,16 @@ public class Crew {
     private Line line;
 
     public void update(String name, Tier tier, Line line) {
+        validateName(name);
         this.name = name;
         this.tier = tier;
         this.line = line;
+    }
+
+    private void validateName(String name) {
+        if (name.length() < 2) {
+            throw new IllegalArgumentException("크루 이름은 2글자 이상이어야 합니다.");
+        }
     }
 
     public String getTier() {
