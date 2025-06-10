@@ -34,6 +34,7 @@ public class CivilWarScheduleController {
     }
 
     @DeleteMapping("/{civilWarScheduleId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCivilWarSchedule(@PathVariable Long civilWarScheduleId) {
         civilWarScheduleService.deleteCivilWarSchedule(civilWarScheduleId);
     }

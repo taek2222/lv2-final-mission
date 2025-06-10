@@ -34,6 +34,7 @@ public class CrewController {
     }
 
     @DeleteMapping("/{crewId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCrew(@PathVariable Long crewId) {
         crewService.deleteCrew(crewId);
     }
