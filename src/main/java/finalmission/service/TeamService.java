@@ -20,6 +20,7 @@ public class TeamService {
     private final CivilWarScheduleRepository civilWarScheduleRepository;
     private final CrewRepository crewRepository;
     private final TeamRepository teamRepository;
+    private final SmsService smsService;
 
     public TeamInfoResponse saveTeam(TeamCreateRequest request) {
         // 리더 탐색
@@ -53,6 +54,7 @@ public class TeamService {
                 .build();
 
         teamRepository.save(saveTeam);
+        smsService.sendTeamCreateMessage(saveTeam.getPhoneNumber());
         return new TeamInfoResponse(saveTeam);
     }
 
