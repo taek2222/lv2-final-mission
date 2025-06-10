@@ -22,10 +22,6 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final SmsService smsService;
 
-    public List<TeamDetailResponse> getAllTeam() {
-        List<Team> teams = teamRepository.findAll();
-    }
-
     public TeamDetailResponse saveTeam(TeamCreateRequest request) {
         // 리더 탐색
         Crew leader = getCrewById(request.leaderId());
