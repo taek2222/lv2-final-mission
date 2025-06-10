@@ -1,8 +1,8 @@
 package finalmission.service;
 
-import finalmission.controller.dto.CrewCreateRequest;
-import finalmission.controller.dto.CrewInfoResponse;
-import finalmission.controller.dto.CrewUpdateRequest;
+import finalmission.controller.dto.request.CrewCreateRequest;
+import finalmission.controller.dto.request.CrewUpdateRequest;
+import finalmission.controller.dto.response.CrewInfoResponse;
 import finalmission.domain.Crew;
 import finalmission.domain.Line;
 import finalmission.domain.Tier;
