@@ -58,6 +58,10 @@ public class TeamService {
         return new TeamInfoResponse(saveTeam);
     }
 
+    public void deleteTeam(Long teamId) {
+        teamRepository.deleteById(teamId);
+    }
+
     private Crew getCrewById(Long crewId) {
         return crewRepository.findById(crewId)
                 .orElseThrow(RuntimeException::new);
