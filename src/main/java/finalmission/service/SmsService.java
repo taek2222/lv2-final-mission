@@ -16,7 +16,7 @@ public class SmsService {
 
         Message message1 = new Message();
         message1.setFrom(phoneNumber);
-        message1.setTo("01086216609");
+        message1.setTo("01012345678");
         message1.setText("내전 팀 등록이 성공적으로 완료되었습니다.");
 
         messageService.sendOne(new SingleMessageSendingRequest(message1));
