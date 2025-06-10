@@ -1,4 +1,4 @@
-package finalmission.controller.dto;
+package finalmission.controller.dto.response;
 
 import finalmission.domain.Crew;
 
@@ -10,6 +10,11 @@ public record CrewInfoResponse(
 ) {
 
     public CrewInfoResponse(Crew crew) {
-        this(crew.getId(), crew.getName(), crew.getTier(), crew.getLine());
+        this(
+                crew.getId(),
+                crew.getName(),
+                crew.getTier(),
+                crew.getLine()
+        );
     }
 }

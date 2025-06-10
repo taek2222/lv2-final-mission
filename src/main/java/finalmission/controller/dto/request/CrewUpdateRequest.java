@@ -1,4 +1,4 @@
-package finalmission.controller.dto;
+package finalmission.controller.dto.request;
 
 public record CrewUpdateRequest(
         Long id,
@@ -6,5 +6,5 @@ public record CrewUpdateRequest(
         String tier,
         String line
 ) {
-    
+
 }

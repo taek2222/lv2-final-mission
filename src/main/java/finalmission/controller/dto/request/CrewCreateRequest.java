@@ -1,4 +1,4 @@
-package finalmission.controller.dto;
+package finalmission.controller.dto.request;
 
 import finalmission.domain.Crew;
 import finalmission.domain.Line;
