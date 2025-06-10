@@ -30,6 +30,12 @@ public class Crew {
     @Enumerated(EnumType.STRING)
     private Line line;
 
+    public void update(String name, Tier tier, Line line) {
+        this.name = name;
+        this.tier = tier;
+        this.line = line;
+    }
+
     public String getTier() {
         return tier.getName();
     }
