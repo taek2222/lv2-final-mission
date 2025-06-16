@@ -1,4 +1,4 @@
-package finalmission.controller;
+package finalmission.controller.config;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;

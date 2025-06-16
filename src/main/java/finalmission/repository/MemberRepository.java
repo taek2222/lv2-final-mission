@@ -1,4 +1,4 @@
-package finalmission.controller;
+package finalmission.repository;
 
 import finalmission.domain.Member;
 import java.util.Optional;

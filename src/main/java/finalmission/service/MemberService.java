@@ -1,6 +1,10 @@
-package finalmission.controller;
+package finalmission.service;
 
+import finalmission.controller.dto.MemberLoginRequest;
+import finalmission.controller.dto.MemberResponse;
+import finalmission.controller.dto.MemberSignupRequest;
 import finalmission.domain.Member;
+import finalmission.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

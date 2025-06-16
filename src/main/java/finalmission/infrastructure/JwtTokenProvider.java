@@ -1,4 +1,4 @@
-package finalmission.controller;
+package finalmission.infrastructure;
 
 import finalmission.domain.Member;
 import io.jsonwebtoken.Jwts;
