@@ -1,4 +1,4 @@
-package finalmission.controller;
+package finalmission.repository;
 
 import finalmission.domain.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;

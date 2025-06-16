@@ -1,9 +1,12 @@
-package finalmission.controller;
+package finalmission.service;
 
 import finalmission.controller.dto.ReservationRequest;
+import finalmission.controller.dto.ReservationResponse;
 import finalmission.domain.Member;
 import finalmission.domain.Reservation;
 import finalmission.domain.Room;
+import finalmission.repository.ReservationRepository;
+import finalmission.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
