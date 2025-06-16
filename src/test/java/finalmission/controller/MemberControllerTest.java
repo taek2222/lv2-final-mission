@@ -7,11 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import finalmission.controller.config.CookieManager;
 import finalmission.controller.dto.MemberLoginRequest;
 import finalmission.controller.dto.MemberSignupRequest;
-import finalmission.domain.Member;
-import finalmission.infrastructure.JwtTokenProvider;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,19 +20,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class MemberControllerTest {
+class MemberControllerTest extends BaseCookie {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
-    private CookieManager cookieManager;
 
     @Test
     void 성공적으로_회원가입_후_정보를_반환한다() throws Exception {
@@ -68,10 +59,7 @@ class MemberControllerTest {
     @Test
     void 로그인_사용자_정보를_반환한다() throws Exception {
         // given
-        Member member = new Member(1L);
-
-        String token = jwtTokenProvider.generateToken(member);
-        Cookie cookie = cookieManager.generateCookie(token);
+        Cookie cookie = createFixtureCookie();
 
         // when && then
         mockMvc.perform(get("/members/check")
