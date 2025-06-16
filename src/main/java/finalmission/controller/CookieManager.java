@@ -1,0 +1,16 @@
+package finalmission.controller;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
+
+@Component
+public class CookieManager {
+
+    public void setTokenCookie(HttpServletResponse response, String token) {
+        Cookie cookie = new Cookie("token", token);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+    }
+}

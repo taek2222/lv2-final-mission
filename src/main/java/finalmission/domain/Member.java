@@ -35,4 +35,8 @@ public class Member {
         this.password = password;
         this.phoneNumber = phoneNumber;
     }
+
+    public boolean isSamePassword(String password) {
+        return this.password.equals(password);
+    }
 }

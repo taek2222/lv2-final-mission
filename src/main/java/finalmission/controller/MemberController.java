@@ -1,5 +1,7 @@
 package finalmission.controller;
 
+import finalmission.domain.Member;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,10 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
+    private final JwtTokenProvider tokenProvider;
+    private final CookieManager cookieManager;
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
     public MemberResponse signup(@RequestBody MemberSignupRequest request) {
-        return memberService.signupMember(request);
+        return memberService.signup(request);
+    }
+
+    @PostMapping("/login")
+    public void login(@RequestBody MemberLoginRequest loginRequest, HttpServletResponse response) {
+        Member member = memberService.validateLoginAndReturnMember(loginRequest);
+        String token = tokenProvider.generateToken(member);
+        cookieManager.setTokenCookie(response, token);
     }
 }
