@@ -1,11 +1,15 @@
 package finalmission.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import finalmission.controller.dto.ReservationRequest;
+import finalmission.domain.Reservation;
+import finalmission.infrastructure.MailClient;
 import jakarta.servlet.http.Cookie;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
@@ -25,6 +30,9 @@ class ReservationControllerTest extends BaseCookie {
 
     @Autowired
     private ObjectMapper objectMapper;
+    
+    @MockitoBean
+    private MailClient mailClient;
 
     @Test
     void 성공적으로_회의실을_예약한_후_정보를_반환한다() throws Exception {
@@ -37,6 +45,9 @@ class ReservationControllerTest extends BaseCookie {
         LocalTime endTime = LocalTime.of(21, 10);
 
         ReservationRequest request = new ReservationRequest(roomId, date, startTime, endTime);
+
+        doNothing().when(mailClient)
+                .sendReservationMail(any(Reservation.class));
 
         // when && then
         mockMvc.perform(post("/reservations")
