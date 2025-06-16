@@ -5,6 +5,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import finalmission.controller.dto.ReservationRequest;
+import jakarta.servlet.http.Cookie;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import org.junit.jupiter.api.Test;
@@ -16,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class ReservationControllerTest {
+class ReservationControllerTest extends BaseCookie {
 
     @Autowired
     private MockMvc mockMvc;
@@ -27,6 +29,8 @@ class ReservationControllerTest {
     @Test
     void 성공적으로_회의실을_예약한_후_정보를_반환한다() throws Exception {
         // given
+        Cookie cookie = createFixtureCookie();
+
         Long roomId = 1L;
         LocalDate date = LocalDate.of(2025, 6, 15);
         LocalTime startTime = LocalTime.of(18, 10);
@@ -37,10 +41,11 @@ class ReservationControllerTest {
         // when && then
         mockMvc.perform(post("/reservations")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .content(objectMapper.writeValueAsString(request))
+                        .cookie(cookie))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.room").value(1L))
+                .andExpect(jsonPath("$.room").value("어드레스룸"))
                 .andExpect(jsonPath("$.date").value("2025-06-15"))
                 .andExpect(jsonPath("$.startTime").value("18:10"))
                 .andExpect(jsonPath("$.endTime").value("21:10"));
