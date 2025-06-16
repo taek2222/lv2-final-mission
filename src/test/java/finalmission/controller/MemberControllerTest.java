@@ -33,6 +33,7 @@ class MemberControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.nickname").value("테스터"))
                 .andExpect(jsonPath("$.email").value("test@mail.com"));
     }
