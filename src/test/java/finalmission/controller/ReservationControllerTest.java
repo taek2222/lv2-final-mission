@@ -1,0 +1,48 @@
+package finalmission.controller;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+class ReservationControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Test
+    void 성공적으로_회의실을_예약한_후_정보를_반환한다() throws Exception {
+        // given
+        Long roomId = 1L;
+        LocalDate date = LocalDate.of(2025, 6, 15);
+        LocalTime startTime = LocalTime.of(18, 10);
+        LocalTime endTime = LocalTime.of(21, 10);
+
+        ReservationRequest request = new ReservationRequest(roomId, date, startTime, endTime);
+
+        // when && then
+        mockMvc.perform(post("/reservations")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.room").value(1L))
+                .andExpect(jsonPath("$.date").value("2025-06-15"))
+                .andExpect(jsonPath("$.startTime").value("18:10"))
+                .andExpect(jsonPath("$.endTime").value("21:10"));
+    }
+}
