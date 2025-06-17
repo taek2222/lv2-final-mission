@@ -1,5 +1,6 @@
 package finalmission.controller;
 
+import finalmission.controller.dto.ReservationDetailResponse;
 import finalmission.controller.dto.ReservationRequest;
 import finalmission.controller.dto.ReservationResponse;
 import finalmission.domain.Member;
@@ -8,6 +9,7 @@ import finalmission.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,11 @@ public class ReservationController {
     @GetMapping
     public ReservationResponses getAllReservation() {
         return reservationService.getAllReservation();
+    }
+
+    @GetMapping("/{reservationId}")
+    public ReservationDetailResponse getDetailReservation(@PathVariable Long reservationId) {
+        return reservationService.getReservationById(reservationId);
     }
 
     @PostMapping

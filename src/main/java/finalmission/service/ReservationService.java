@@ -1,6 +1,7 @@
 package finalmission.service;
 
 import finalmission.controller.ReservationResponses;
+import finalmission.controller.dto.ReservationDetailResponse;
 import finalmission.controller.dto.ReservationRequest;
 import finalmission.controller.dto.ReservationResponse;
 import finalmission.domain.Member;
@@ -28,8 +29,13 @@ public class ReservationService {
         return new ReservationResponses(responses);
     }
 
+    public ReservationDetailResponse getReservationById(Long reservationId) {
+        Reservation reservation = getReservationBy(reservationId);
+        return new ReservationDetailResponse(reservation);
+    }
+
     public ReservationResponse registerReservation(Member member, ReservationRequest request) {
-        Room room = getRoomByRoomId(request);
+        Room room = getRoomBy(request.roomId());
         Reservation reservation = request.toReservation(member, room);
         reservationRepository.save(reservation);
 
@@ -37,8 +43,13 @@ public class ReservationService {
         return new ReservationResponse(reservation);
     }
 
-    private Room getRoomByRoomId(ReservationRequest request) {
-        return roomRepository.findById(request.roomId())
+    private Reservation getReservationBy(Long reservationId) {
+        return reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new RuntimeException()); // todo : 커스텀 예외 추가
+    }
+
+    private Room getRoomBy(Long roomId) {
+        return roomRepository.findById(roomId)
                 .orElseThrow(() -> new RuntimeException("서버의 문제가 발생했습니다."));// todo : 에러 커스텀 적용
     }
 }
