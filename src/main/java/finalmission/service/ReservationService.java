@@ -59,7 +59,10 @@ public class ReservationService {
             Member member
     ) {
         Reservation reservation = getReservationById(reservationId);
-        validateReservationLimit(member.getId(), request.date());
+
+        if (!reservation.matchDate(request.date())) {
+            validateReservationLimit(member.getId(), request.date());
+        }
 
         String errorMessage = "다른 사용자 예약을 수정할 수 없습니다.";
         validateDifferentMember(reservation.getMember(), member, errorMessage);

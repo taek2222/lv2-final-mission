@@ -53,6 +53,10 @@ public class Reservation {
         return !(!endTime.isAfter(this.startTime) || !startTime.isBefore(this.endTime));
     }
 
+    public boolean matchDate(LocalDate date) {
+        return this.date.equals(date);
+    }
+
     public void update(Room room, LocalDate date, LocalTime startTime, LocalTime endTime) {
         this.room = room;
         this.date = date;
