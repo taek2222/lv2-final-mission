@@ -78,6 +78,19 @@ class ReservationControllerTest extends BaseCookie {
     }
 
     @Test
+    void 사용자가_아닌_경우_예약_상세_죄회시_예외가_발생한다() throws Exception {
+        // given
+        Cookie cookie = createFixtureCookie();
+        long reservationId = 3L;
+
+        // when && then
+        mockMvc.perform(get("/reservations/" + reservationId)
+                        .cookie(cookie))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("다른 사용자 예약을 상세 열람할 수 없습니다."));
+    }
+
+    @Test
     void 사용자가_아닌_경우_예약_죄회시_예외가_발생한다() throws Exception {
         // when && then
         mockMvc.perform(get("/reservations"))
