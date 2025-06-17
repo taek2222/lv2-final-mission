@@ -1,5 +1,7 @@
 package finalmission.global.config;
 
+import static finalmission.global.exception.ErrorMessage.INTERNAL_SERVER_ERROR;
+
 import finalmission.controller.config.CookieManager;
 import finalmission.domain.Member;
 import finalmission.infrastructure.JwtTokenProvider;
@@ -36,8 +38,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         String token = cookieManager.extractToken(request);
         Long memberId = tokenProvider.extractMemberId(token);
 
-        // todo : 에러 메시지 타입
         return memberRepository.findById(memberId)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new RuntimeException(INTERNAL_SERVER_ERROR.get()));
     }
 }

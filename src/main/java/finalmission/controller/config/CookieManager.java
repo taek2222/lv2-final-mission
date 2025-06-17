@@ -26,6 +26,6 @@ public class CookieManager {
                 .filter(cookie -> cookie.getName().equals("token"))
                 .findFirst()
                 .map(Cookie::getValue)
-                .orElseThrow(() -> new RuntimeException("다시 로그인해 주세요.")); // todo : 에러 메시지 타입
+                .orElseThrow(() -> new RuntimeException("다시 로그인해 주세요."));
     }
 }

@@ -1,5 +1,7 @@
 package finalmission.service;
 
+import static finalmission.global.exception.ErrorMessage.INTERNAL_SERVER_ERROR;
+
 import finalmission.controller.dto.ReservationDetailResponse;
 import finalmission.controller.dto.ReservationRequest;
 import finalmission.controller.dto.ReservationResponse;
@@ -110,7 +112,7 @@ public class ReservationService {
 
     private Reservation getReservationById(Long reservationId) {
         return reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new RuntimeException()); // todo : 커스텀 예외 추가
+                .orElseThrow(() -> new RuntimeException(INTERNAL_SERVER_ERROR.get()));
     }
 
     private void validateDifferentMember(Member reservationMember, Member loginMember, String errorMessage) {
@@ -121,6 +123,6 @@ public class ReservationService {
 
     private Room getRoomById(Long roomId) {
         return roomRepository.findById(roomId)
-                .orElseThrow(() -> new RuntimeException("서버의 문제가 발생했습니다."));// todo : 에러 커스텀 적용
+                .orElseThrow(() -> new RuntimeException(INTERNAL_SERVER_ERROR.get()));
     }
 }
