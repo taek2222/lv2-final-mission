@@ -18,6 +18,8 @@ import finalmission.repository.RoomRepository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -83,6 +85,7 @@ class ReservationServiceTest {
 
         reservationRepository.save(new Reservation(member, room, date, LocalTime.of(16, 0), LocalTime.of(17, 0)));
         reservationRepository.save(new Reservation(member, room, date, LocalTime.of(17, 0), LocalTime.of(18, 0)));
+
         Reservation updateReservation = reservationRepository.save(
                 new Reservation(member, room, LocalDate.of(2025, 4, 24), LocalTime.of(18, 0), LocalTime.of(19, 0)));
 
@@ -93,6 +96,34 @@ class ReservationServiceTest {
         assertThatCode(() -> reservationService.updateReservation(updateReservation.getId(), updateRequest, member))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("같은 날 3개 이상 회의실을 예약할 수 없습니다.");
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "16:00, 16:30",
+            "16:30, 17:00",
+            "16:00, 17:00"
+    })
+    void 중복되는_시간의_예약일_경우_예외가_발생한다(LocalTime startTime, LocalTime endTime) throws JsonProcessingException {
+        // given
+        Member member = generateMember();
+        Room room = generateRoom();
+        LocalDate date = LocalDate.of(2025, 4, 23);
+
+        doNothing().when(mailClient)
+                .sendReservationMail(any(Reservation.class));
+
+        doNothing().when(coolSmsClient)
+                .sendReservationSms(any(Reservation.class));
+
+        reservationRepository.save(new Reservation(member, room, date, LocalTime.of(16, 0), LocalTime.of(17, 0)));
+
+        ReservationRequest request = new ReservationRequest(room.getId(), date, startTime, endTime);
+
+        // then && when
+        assertThatCode(() -> reservationService.registerReservation(member, request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이미 예약된 시간입니다. 다른 시간을 이용해 주세요.");
     }
 
     private Room generateRoom() {
