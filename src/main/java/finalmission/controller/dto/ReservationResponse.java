@@ -6,7 +6,6 @@ import java.time.format.DateTimeFormatter;
 
 public record ReservationResponse(
         Long id,
-        String nickname,
         String room,
         LocalDate date,
         String startTime,
@@ -18,7 +17,6 @@ public record ReservationResponse(
     public ReservationResponse(Reservation reservation) {
         this(
                 reservation.getId(),
-                reservation.getMember().getNickname(),
                 reservation.getRoom().getName(),
                 reservation.getDate(),
                 reservation.getStartTime(TIME_FORMATTER),
