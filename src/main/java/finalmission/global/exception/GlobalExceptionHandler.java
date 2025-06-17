@@ -13,4 +13,10 @@ public class GlobalExceptionHandler {
         ErrorResponse response = new ErrorResponse(exception.getMessage(), HttpStatus.BAD_REQUEST.value());
         return ResponseEntity.badRequest().body(response);
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException exception) {
+        ErrorResponse response = new ErrorResponse(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+        return ResponseEntity.internalServerError().body(response);
+    }
 }
