@@ -10,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MailClientTest {
+class MailGunClientTest {
 
     @Autowired
-    private MailClient mailClient;
+    private MailGunClient mailClient;
 
     @Autowired
     private ReservationRepository reservationRepository;

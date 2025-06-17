@@ -9,7 +9,7 @@ import org.springframework.web.client.RestClient;
 
 @Component
 @RequiredArgsConstructor
-public class MailClient {
+public class MailGunClient {
 
     private final RestClient mailRestClient;
 

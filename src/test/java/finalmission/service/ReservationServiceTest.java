@@ -10,7 +10,7 @@ import finalmission.controller.dto.ReservationUpdateRequest;
 import finalmission.domain.Member;
 import finalmission.domain.Reservation;
 import finalmission.domain.Room;
-import finalmission.infrastructure.MailClient;
+import finalmission.infrastructure.MailGunClient;
 import finalmission.infrastructure.sms.CoolSmsClient;
 import finalmission.repository.MemberRepository;
 import finalmission.repository.ReservationRepository;
@@ -40,7 +40,7 @@ class ReservationServiceTest {
     private RoomRepository roomRepository;
 
     @MockitoBean
-    private MailClient mailClient;
+    private MailGunClient mailClient;
 
     @MockitoBean
     private CoolSmsClient coolSmsClient;

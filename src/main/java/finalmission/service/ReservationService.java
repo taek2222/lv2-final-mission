@@ -8,7 +8,7 @@ import finalmission.controller.dto.ReservationUpdateRequest;
 import finalmission.domain.Member;
 import finalmission.domain.Reservation;
 import finalmission.domain.Room;
-import finalmission.infrastructure.MailClient;
+import finalmission.infrastructure.MailGunClient;
 import finalmission.repository.ReservationRepository;
 import finalmission.repository.RoomRepository;
 import java.time.LocalDate;
@@ -23,7 +23,7 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final RoomRepository roomRepository;
-    private final MailClient mailClient;
+    private final MailGunClient mailClient;
 
     public ReservationResponses getAllReservation() {
         List<ReservationResponse> responses = reservationRepository.findAll().stream()

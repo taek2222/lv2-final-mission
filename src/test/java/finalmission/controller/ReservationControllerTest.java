@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import finalmission.controller.dto.ReservationRequest;
 import finalmission.controller.dto.ReservationUpdateRequest;
 import finalmission.domain.Reservation;
-import finalmission.infrastructure.MailClient;
+import finalmission.infrastructure.MailGunClient;
 import finalmission.repository.ReservationRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.transaction.Transactional;
@@ -44,7 +44,7 @@ class ReservationControllerTest extends BaseCookie {
     private ReservationRepository reservationRepository;
 
     @MockitoBean
-    private MailClient mailClient;
+    private MailGunClient mailClient;
 
     @Test
     void 모든_예약_현황을_조회한다() throws Exception {
