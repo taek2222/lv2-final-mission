@@ -60,20 +60,10 @@ public class ReservationService {
     ) {
         Reservation reservation = getReservationById(reservationId);
 
-        if (!reservation.matchDate(request.date())) {
-            validateReservationLimit(member.getId(), request.date());
-        }
-
-        String errorMessage = "다른 사용자 예약을 수정할 수 없습니다.";
-        validateDifferentMember(reservation.getMember(), member, errorMessage);
+        validateUpdate(request, member, reservation);
 
         Room room = getRoomById(request.roomId());
-        reservation.update(
-                room,
-                request.date(),
-                request.startTime(),
-                request.endTime()
-        );
+        reservation.update(room, request.date(), request.startTime(), request.endTime());
         return new ReservationResponse(reservation);
     }
 
@@ -84,6 +74,20 @@ public class ReservationService {
         validateDifferentMember(reservation.getMember(), member, errorMessage);
 
         reservationRepository.deleteById(reservationId);
+    }
+
+    private void validateUpdate(ReservationUpdateRequest request, Member member, Reservation reservation) {
+        String errorMessage = "다른 사용자 예약을 수정할 수 없습니다.";
+
+        if (!reservation.matchDate(request.date())) {
+            validateReservationLimit(member.getId(), request.date());
+        }
+
+        validateDifferentMember(reservation.getMember(), member, errorMessage);
+
+        if (!reservation.isDuplicateTime(request.startTime(), request.endTime())) {
+            validateDuplicateTime(request.date(), request.startTime(), request.endTime());
+        }
     }
 
     private void validateReservationLimit(Long memberId, LocalDate date) {
