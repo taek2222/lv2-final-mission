@@ -12,6 +12,7 @@ import finalmission.infrastructure.MailClient;
 import finalmission.repository.ReservationRepository;
 import finalmission.repository.RoomRepository;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -44,14 +45,7 @@ public class ReservationService {
         Reservation reservation = request.toReservation(member, room);
 
         validateReservationLimit(member.getId(), reservation.getDate());
-
-        List<Reservation> reservations = reservationRepository.findAllByDate(request.date());
-        boolean match = reservations.stream()
-                .anyMatch(reservation1 -> reservation1.isDuplicateTime(request.startTime(), request.endTime()));
-
-        if (match) {
-            throw new IllegalArgumentException("이미 예약된 시간입니다. 다른 시간을 이용해 주세요.");
-        }
+        validateDuplicateTime(request.date(), request.startTime(), request.endTime());
 
         reservationRepository.save(reservation);
 
@@ -94,6 +88,16 @@ public class ReservationService {
 
         if (reservations.size() >= 2) {
             throw new IllegalArgumentException("같은 날 3개 이상 회의실을 예약할 수 없습니다.");
+        }
+    }
+
+    private void validateDuplicateTime(LocalDate date, LocalTime startTime, LocalTime endTime) {
+        List<Reservation> reservations = reservationRepository.findAllByDate(date);
+        boolean isDuplicate = reservations.stream()
+                .anyMatch(reservation -> reservation.isDuplicateTime(startTime, endTime));
+
+        if (isDuplicate) {
+            throw new IllegalArgumentException("이미 예약된 시간입니다. 다른 시간을 이용해 주세요.");
         }
     }
 
