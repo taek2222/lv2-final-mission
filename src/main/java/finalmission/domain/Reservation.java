@@ -59,6 +59,7 @@ public class Reservation {
     private void validateTime(LocalTime startTime, LocalTime endTime) {
         validateTimeUnit(startTime, endTime);
         validateTimeRange(startTime, endTime);
+        validateSameAndOverTime(startTime, endTime);
     }
 
     private void validateTimeUnit(LocalTime startTime, LocalTime endTime) {
@@ -71,6 +72,12 @@ public class Reservation {
         Duration between = Duration.between(startTime, endTime);
         if (between.toMinutes() > 60) {
             throw new IllegalArgumentException("예약 시간은 1시간을 초과할 수 없습니다.");
+        }
+    }
+
+    private void validateSameAndOverTime(LocalTime startTime, LocalTime endTime) {
+        if (!startTime.isBefore(endTime)) {
+            throw new IllegalArgumentException("예약 시작 시간은 종료 시간과 같거나 이후일 수 없습니다.");
         }
     }
 
