@@ -33,7 +33,8 @@ public class ReservationService {
     public ReservationDetailResponse getDetailReservationById(Long reservationId, Member member) {
         Reservation reservation = getReservationById(reservationId);
 
-        validateDifferentMember(reservation.getMember(), member);
+        String errorMessage = "다른 사용자 예약을 상세 열람할 수 없습니다.";
+        validateDifferentMember(reservation.getMember(), member, errorMessage);
         return new ReservationDetailResponse(reservation);
     }
 
@@ -52,7 +53,9 @@ public class ReservationService {
             Member member
     ) {
         Reservation reservation = getReservationById(reservationId);
-        validateDifferentMember(reservation.getMember(), member);
+
+        String errorMessage = "다른 사용자 예약을 수정할 수 없습니다.";
+        validateDifferentMember(reservation.getMember(), member, errorMessage);
 
         Room room = getRoomById(request.roomId());
         reservation.update(
@@ -61,11 +64,15 @@ public class ReservationService {
                 request.startTime(),
                 request.endTime()
         );
-
         return new ReservationResponse(reservation);
     }
 
     public void deleteReservation(Long reservationId, Member member) {
+        Reservation reservation = getReservationById(reservationId);
+
+        String errorMessage = "다른 사용자 예약을 삭제할 수 없습니다.";
+        validateDifferentMember(reservation.getMember(), member, errorMessage);
+
         reservationRepository.deleteById(reservationId);
     }
 
@@ -74,9 +81,9 @@ public class ReservationService {
                 .orElseThrow(() -> new RuntimeException()); // todo : 커스텀 예외 추가
     }
 
-    private void validateDifferentMember(Member reservationMember, Member loginMember) {
+    private void validateDifferentMember(Member reservationMember, Member loginMember, String errorMessage) {
         if (!reservationMember.equals(loginMember)) {
-            throw new IllegalArgumentException("다른 사용자 예약을 상세 열람할 수 없습니다.");
+            throw new IllegalArgumentException(errorMessage);
         }
     }
 
