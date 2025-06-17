@@ -6,6 +6,7 @@ import static org.mockito.Mockito.doNothing;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import finalmission.controller.dto.ReservationRequest;
+import finalmission.controller.dto.ReservationUpdateRequest;
 import finalmission.domain.Member;
 import finalmission.domain.Reservation;
 import finalmission.domain.Room;
@@ -63,6 +64,33 @@ class ReservationServiceTest {
 
         // when && then
         assertThatCode(() -> reservationService.registerReservation(member, request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("같은 날 3개 이상 회의실을 예약할 수 없습니다.");
+    }
+
+    @Test
+    void 수정_희망_날짜에_2개_이상의_예약이_존재할_경우_예외가_발생한다() throws JsonProcessingException {
+        // given
+        Member member = generateMember();
+        Room room = generateRoom();
+        LocalDate date = LocalDate.of(2025, 4, 23);
+
+        doNothing().when(mailClient)
+                .sendReservationMail(any(Reservation.class));
+
+        doNothing().when(coolSmsClient)
+                .sendReservationSms(any(Reservation.class));
+
+        reservationRepository.save(new Reservation(member, room, date, LocalTime.of(16, 0), LocalTime.of(17, 0)));
+        reservationRepository.save(new Reservation(member, room, date, LocalTime.of(17, 0), LocalTime.of(18, 0)));
+        Reservation updateReservation = reservationRepository.save(
+                new Reservation(member, room, LocalDate.of(2025, 4, 24), LocalTime.of(18, 0), LocalTime.of(19, 0)));
+
+        ReservationUpdateRequest updateRequest = new ReservationUpdateRequest(room.getId(), date,
+                LocalTime.of(18, 0), LocalTime.of(19, 0));
+
+        // when && then
+        assertThatCode(() -> reservationService.updateReservation(updateReservation.getId(), updateRequest, member))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("같은 날 3개 이상 회의실을 예약할 수 없습니다.");
     }
