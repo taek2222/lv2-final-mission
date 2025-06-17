@@ -110,7 +110,7 @@ class ReservationControllerTest extends BaseCookie {
         Long roomId = 1L;
         LocalDate date = LocalDate.of(2025, 6, 15);
         LocalTime startTime = LocalTime.of(18, 10);
-        LocalTime endTime = LocalTime.of(19, 10);
+        LocalTime endTime = LocalTime.of(19, 0);
 
         ReservationRequest request = new ReservationRequest(roomId, date, startTime, endTime);
 
@@ -127,7 +127,7 @@ class ReservationControllerTest extends BaseCookie {
                 .andExpect(jsonPath("$.room").value("어드레스룸"))
                 .andExpect(jsonPath("$.date").value("2025-06-15"))
                 .andExpect(jsonPath("$.startTime").value("18:10"))
-                .andExpect(jsonPath("$.endTime").value("19:10"));
+                .andExpect(jsonPath("$.endTime").value("19:00"));
     }
 
     @Test
