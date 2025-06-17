@@ -32,7 +32,7 @@ public class MailClient {
 
     private String createMailText(Reservation reservation) {
         return String.format("""
-                        에약이 등록되었습니다.
+                        예약이 등록되었습니다.
                         
                         예약 정보
                         - 예약자 닉네임 : %s
