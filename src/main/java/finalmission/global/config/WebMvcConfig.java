@@ -1,4 +1,4 @@
-package finalmission.global;
+package finalmission.global.config;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;

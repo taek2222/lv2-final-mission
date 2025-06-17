@@ -5,7 +5,7 @@ import finalmission.controller.dto.MemberLoginRequest;
 import finalmission.controller.dto.MemberResponse;
 import finalmission.controller.dto.MemberSignupRequest;
 import finalmission.domain.Member;
-import finalmission.global.AuthenticationPrincipal;
+import finalmission.global.config.AuthenticationPrincipal;
 import finalmission.infrastructure.JwtTokenProvider;
 import finalmission.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;

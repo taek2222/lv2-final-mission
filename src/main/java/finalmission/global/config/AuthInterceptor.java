@@ -1,4 +1,4 @@
-package finalmission.global;
+package finalmission.global.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

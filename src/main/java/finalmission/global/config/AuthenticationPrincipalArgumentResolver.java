@@ -1,4 +1,4 @@
-package finalmission.global;
+package finalmission.global.config;
 
 import finalmission.controller.config.CookieManager;
 import finalmission.domain.Member;

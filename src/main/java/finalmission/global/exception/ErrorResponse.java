@@ -1,4 +1,4 @@
-package finalmission.global;
+package finalmission.global.exception;
 
 public record ErrorResponse(
         String message,

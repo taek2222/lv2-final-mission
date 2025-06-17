@@ -1,4 +1,4 @@
-package finalmission.global;
+package finalmission.global.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -5,7 +5,7 @@ import finalmission.controller.dto.ReservationRequest;
 import finalmission.controller.dto.ReservationResponse;
 import finalmission.controller.dto.ReservationResponses;
 import finalmission.domain.Member;
-import finalmission.global.AuthenticationPrincipal;
+import finalmission.global.config.AuthenticationPrincipal;
 import finalmission.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

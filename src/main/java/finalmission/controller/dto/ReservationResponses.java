@@ -1,6 +1,5 @@
-package finalmission.controller;
+package finalmission.controller.dto;
 
-import finalmission.controller.dto.ReservationResponse;
 import java.util.List;
 
 public record ReservationResponses(

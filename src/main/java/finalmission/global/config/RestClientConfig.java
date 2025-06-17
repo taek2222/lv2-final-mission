@@ -1,4 +1,4 @@
-package finalmission.global;
+package finalmission.global.config;
 
 import finalmission.infrastructure.sms.CoolSmsAuthorizationInterceptor;
 import java.util.Base64;
