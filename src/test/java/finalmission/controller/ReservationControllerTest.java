@@ -1,7 +1,9 @@
 package finalmission.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -13,6 +15,7 @@ import finalmission.controller.dto.ReservationRequest;
 import finalmission.controller.dto.ReservationUpdateRequest;
 import finalmission.domain.Reservation;
 import finalmission.infrastructure.MailClient;
+import finalmission.repository.ReservationRepository;
 import jakarta.servlet.http.Cookie;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -23,6 +26,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -33,6 +37,9 @@ class ReservationControllerTest extends BaseCookie {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     @MockitoBean
     private MailClient mailClient;
@@ -153,5 +160,24 @@ class ReservationControllerTest extends BaseCookie {
                 .andExpect(jsonPath("$.date").value("2025-06-15"))
                 .andExpect(jsonPath("$.startTime").value("19:00"))
                 .andExpect(jsonPath("$.endTime").value("20:00"));
+    }
+
+    @Test
+    void 회의실_예약을_삭제한다() throws Exception {
+        // given
+        Cookie cookie = createFixtureCookie();
+        long deleteReservationId = 1L;
+
+        boolean existed = reservationRepository.existsById(deleteReservationId);
+
+        // when
+        ResultActions actions = mockMvc.perform(delete("/reservations/" + deleteReservationId)
+                .cookie(cookie));
+
+        boolean result = reservationRepository.existsById(deleteReservationId);
+
+        // then
+        actions.andExpect(status().isNoContent());
+        assertThat(result).isNotEqualTo(existed);
     }
 }
