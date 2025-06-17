@@ -43,6 +43,7 @@ class ReservationControllerTest extends BaseCookie {
         // when && then
         mockMvc.perform(get("/reservations")
                         .cookie(cookie))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.reservations[0].id").value(1))
                 .andExpect(jsonPath("$.reservations[0].room").value("어드레스룸"))
                 .andExpect(jsonPath("$.reservations[0].date").value("2025-06-15"))
@@ -53,6 +54,26 @@ class ReservationControllerTest extends BaseCookie {
                 .andExpect(jsonPath("$.reservations[1].date").value("2025-06-16"))
                 .andExpect(jsonPath("$.reservations[1].startTime").value("20:00"))
                 .andExpect(jsonPath("$.reservations[1].endTime").value("21:00"))
+        ;
+    }
+
+    @Test
+    void 예약_상세보기_정보를_반환한다() throws Exception {
+        // given
+        Cookie cookie = createFixtureCookie();
+        long reservationId = 1L;
+
+        // when && then
+        mockMvc.perform(get("/reservations/" + reservationId)
+                        .cookie(cookie))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.nickname").value("테스트1"))
+                .andExpect(jsonPath("$.room.id").value(1))
+                .andExpect(jsonPath("$.room.name").value("어드레스룸"))
+                .andExpect(jsonPath("$.date").value("2025-06-15"))
+                .andExpect(jsonPath("$.startTime").value("19:00"))
+                .andExpect(jsonPath("$.endTime").value("20:00"))
         ;
     }
 
