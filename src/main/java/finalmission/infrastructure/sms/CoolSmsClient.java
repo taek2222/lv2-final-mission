@@ -4,10 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import finalmission.domain.Reservation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class CoolSmsClient {
@@ -25,6 +27,8 @@ public class CoolSmsClient {
                 .body(objectMapper.writeValueAsString(request))
                 .retrieve()
                 .toBodilessEntity();
+
+        log.info("[SMS] 예약 성공 메시지 전송 memberId: {}", reservation.getMember().getId());
     }
 
     private String createSmsMessage(Reservation reservation) {

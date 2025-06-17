@@ -4,8 +4,10 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class CookieManager {
 
@@ -26,6 +28,9 @@ public class CookieManager {
                 .filter(cookie -> cookie.getName().equals("token"))
                 .findFirst()
                 .map(Cookie::getValue)
-                .orElseThrow(() -> new RuntimeException("다시 로그인해 주세요."));
+                .orElseThrow(() -> {
+                    log.error("[인증] 토큰 추출 과정 에러 - cookies: {}", (Object) request.getCookies());
+                    return new RuntimeException("다시 로그인해 주세요.");
+                });
     }
 }

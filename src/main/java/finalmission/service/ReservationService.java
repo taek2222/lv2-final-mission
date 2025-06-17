@@ -17,8 +17,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReservationService {
@@ -52,6 +54,8 @@ public class ReservationService {
         reservationRepository.save(reservation);
 
         mailClient.sendReservationMail(reservation);
+
+        log.info("[예약 등록 성공] 회의실 예약 등록 성공 reservationId: {}", reservation.getId());
         return new ReservationResponse(reservation);
     }
 
@@ -66,6 +70,7 @@ public class ReservationService {
 
         Room room = getRoomById(request.roomId());
         reservation.update(room, request.date(), request.startTime(), request.endTime());
+        log.info("[예약 수정 성공] 회의실 예약 수정 성공 reservationId: {}", reservation.getId());
         return new ReservationResponse(reservation);
     }
 
@@ -76,6 +81,7 @@ public class ReservationService {
         validateDifferentMember(reservation.getMember(), member, errorMessage);
 
         reservationRepository.deleteById(reservationId);
+        log.info("[예약 삭제 성공] 회의실 예약 삭제 성공 reservationId: {}", reservation.getId());
     }
 
     private void validateUpdate(ReservationUpdateRequest request, Member member, Reservation reservation) {
@@ -112,7 +118,10 @@ public class ReservationService {
 
     private Reservation getReservationById(Long reservationId) {
         return reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new RuntimeException(INTERNAL_SERVER_ERROR.get()));
+                .orElseThrow(() -> {
+                    log.error("[예약 서비스] 존재하지 않는 예약 조회 - reservationId: {}", reservationId);
+                    return new RuntimeException(INTERNAL_SERVER_ERROR.get());
+                });
     }
 
     private void validateDifferentMember(Member reservationMember, Member loginMember, String errorMessage) {
@@ -123,6 +132,9 @@ public class ReservationService {
 
     private Room getRoomById(Long roomId) {
         return roomRepository.findById(roomId)
-                .orElseThrow(() -> new RuntimeException(INTERNAL_SERVER_ERROR.get()));
+                .orElseThrow(() -> {
+                    log.error("[예약 서비스] 존재하지 않는 방 조회 - roomId: {}", roomId);
+                    return new RuntimeException(INTERNAL_SERVER_ERROR.get());
+                });
     }
 }

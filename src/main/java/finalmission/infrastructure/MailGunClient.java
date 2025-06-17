@@ -2,11 +2,13 @@ package finalmission.infrastructure;
 
 import finalmission.domain.Reservation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class MailGunClient {
@@ -28,6 +30,8 @@ public class MailGunClient {
                 .body(builder.build())
                 .retrieve()
                 .toBodilessEntity();
+
+        log.info("[SMS] 예약 성공 메일 전송 memberId: {}", reservation.getMember().getId());
     }
 
     private String createMailText(Reservation reservation) {
