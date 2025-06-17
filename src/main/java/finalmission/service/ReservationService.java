@@ -43,6 +43,13 @@ public class ReservationService {
         Reservation reservation = request.toReservation(member, room);
         reservationRepository.save(reservation);
 
+        List<Reservation> reservations = reservationRepository.findAllByMemberIdAndDate(member.getId(),
+                reservation.getDate());
+
+        if (reservations.size() >= 3) {
+            throw new IllegalArgumentException("같은 날 3개 이상 회의실을 예약할 수 없습니다.");
+        }
+
         mailClient.sendReservationMail(reservation);
         return new ReservationResponse(reservation);
     }
