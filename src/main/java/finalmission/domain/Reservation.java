@@ -40,6 +40,7 @@ public class Reservation {
     private LocalTime endTime;
 
     public Reservation(Member member, Room room, LocalDate date, LocalTime startTime, LocalTime endTime) {
+        validateTime(startTime, endTime);
         this.member = member;
         this.room = room;
         this.date = date;
@@ -52,6 +53,12 @@ public class Reservation {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+
+    private void validateTime(LocalTime startTime, LocalTime endTime) {
+        if (startTime.getMinute() % 10 != 0 || endTime.getMinute() % 10 != 0) {
+            throw new IllegalArgumentException("예약 시간은 10분 단위만 가능합니다.");
+        }
     }
 
     public String getStartTime(DateTimeFormatter formatter) {
