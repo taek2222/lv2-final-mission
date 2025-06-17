@@ -3,12 +3,14 @@ package finalmission.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import finalmission.controller.dto.ReservationRequest;
+import finalmission.controller.dto.ReservationUpdateRequest;
 import finalmission.domain.Reservation;
 import finalmission.infrastructure.MailClient;
 import jakarta.servlet.http.Cookie;
@@ -36,7 +38,7 @@ class ReservationControllerTest extends BaseCookie {
     private MailClient mailClient;
 
     @Test
-    void 모든_예약_현황을_반환한다() throws Exception {
+    void 모든_예약_현황을_조회한다() throws Exception {
         // given
         Cookie cookie = createFixtureCookie();
 
@@ -58,7 +60,7 @@ class ReservationControllerTest extends BaseCookie {
     }
 
     @Test
-    void 예약_상세보기_정보를_반환한다() throws Exception {
+    void 예약을_상세_조회_한다() throws Exception {
         // given
         Cookie cookie = createFixtureCookie();
         long reservationId = 1L;
@@ -99,7 +101,7 @@ class ReservationControllerTest extends BaseCookie {
     }
 
     @Test
-    void 성공적으로_회의실을_예약한_후_정보를_반환한다() throws Exception {
+    void 회의실을_예약한다() throws Exception {
         // given
         Cookie cookie = createFixtureCookie();
 
@@ -124,5 +126,32 @@ class ReservationControllerTest extends BaseCookie {
                 .andExpect(jsonPath("$.date").value("2025-06-15"))
                 .andExpect(jsonPath("$.startTime").value("18:10"))
                 .andExpect(jsonPath("$.endTime").value("21:10"));
+    }
+
+    @Test
+    void 회의실_예약을_수정한다() throws Exception {
+        // given
+        Cookie cookie = createFixtureCookie();
+
+        long updateReservationId = 1L;
+        Long roomId = 2L;
+        LocalDate date = LocalDate.of(2025, 6, 15);
+        LocalTime startTime = LocalTime.of(19, 0);
+        LocalTime endTime = LocalTime.of(20, 0);
+
+        ReservationUpdateRequest request = new ReservationUpdateRequest(roomId, date,
+                startTime, endTime);
+
+        // when && then
+        mockMvc.perform(patch("/reservations/" + updateReservationId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                        .cookie(cookie))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.room").value("백스윙룸"))
+                .andExpect(jsonPath("$.date").value("2025-06-15"))
+                .andExpect(jsonPath("$.startTime").value("19:00"))
+                .andExpect(jsonPath("$.endTime").value("20:00"));
     }
 }
