@@ -73,4 +73,22 @@ class ReservationTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("예약 시간은 1시간을 초과할 수 없습니다.");
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "13:00, 13:00",
+            "13:10, 13:00",
+            "14:00, 13:00"
+    })
+    void 예약_시작_시간이_종료_시간_같거나_이후인_경우_예외가_발생한다(LocalTime startTime, LocalTime endTime) {
+        // given
+        Member member = new Member();
+        Room room = new Room();
+        LocalDate date = LocalDate.MAX;
+
+        // when && then
+        assertThatCode(() -> new Reservation(member, room, date, startTime, endTime))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("예약 시작 시간은 종료 시간과 같거나 이후일 수 없습니다.");
+    }
 }
