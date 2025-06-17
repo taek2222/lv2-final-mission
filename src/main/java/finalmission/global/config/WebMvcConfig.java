@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     private final AuthenticationPrincipalArgumentResolver authenticationPrincipalArgumentResolver;
+    private final LogInterceptor logInterceptor;
     private final AuthInterceptor authInterceptor;
 
     @Override
@@ -21,6 +22,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(logInterceptor);
         registry.addInterceptor(authInterceptor)
                 .excludePathPatterns("/members/signup", "/members/login");
     }
