@@ -43,17 +43,24 @@ class ReservationControllerTest extends BaseCookie {
         // when && then
         mockMvc.perform(get("/reservations")
                         .cookie(cookie))
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].room").value("어드레스룸"))
-                .andExpect(jsonPath("$[0].date").value("2025-06-15"))
-                .andExpect(jsonPath("$[0].startTime").value("19:00"))
-                .andExpect(jsonPath("$[0].endTime").value("20:00"))
-                .andExpect(jsonPath("$[1].id").value(1))
-                .andExpect(jsonPath("$[1].room").value("백스윙룸"))
-                .andExpect(jsonPath("$[1].date").value("2025-06-16"))
-                .andExpect(jsonPath("$[1].startTime").value("20:00"))
-                .andExpect(jsonPath("$[1].endTime").value("21:00"))
+                .andExpect(jsonPath("$.reservations[0].id").value(1))
+                .andExpect(jsonPath("$.reservations[0].room").value("어드레스룸"))
+                .andExpect(jsonPath("$.reservations[0].date").value("2025-06-15"))
+                .andExpect(jsonPath("$.reservations[0].startTime").value("19:00"))
+                .andExpect(jsonPath("$.reservations[0].endTime").value("20:00"))
+                .andExpect(jsonPath("$.reservations[1].id").value(2))
+                .andExpect(jsonPath("$.reservations[1].room").value("백스윙룸"))
+                .andExpect(jsonPath("$.reservations[1].date").value("2025-06-16"))
+                .andExpect(jsonPath("$.reservations[1].startTime").value("20:00"))
+                .andExpect(jsonPath("$.reservations[1].endTime").value("21:00"))
         ;
+    }
+
+    @Test
+    void 사용자가_아닌_경우_예약_죄회시_예외가_발생한다() throws Exception {
+        // when && then
+        mockMvc.perform(get("/reservations"))
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
