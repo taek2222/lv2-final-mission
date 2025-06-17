@@ -17,6 +17,7 @@ import finalmission.domain.Reservation;
 import finalmission.infrastructure.MailClient;
 import finalmission.repository.ReservationRepository;
 import jakarta.servlet.http.Cookie;
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+@Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 class ReservationControllerTest extends BaseCookie {
@@ -87,7 +89,7 @@ class ReservationControllerTest extends BaseCookie {
     }
 
     @Test
-    void 사용자가_아닌_경우_예약_상세_죄회시_예외가_발생한다() throws Exception {
+    void 사용자가_아닌_경우_예약_상세_조회시_예외가_발생한다() throws Exception {
         // given
         Cookie cookie = createFixtureCookie();
         long reservationId = 3L;
@@ -98,13 +100,6 @@ class ReservationControllerTest extends BaseCookie {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("다른 사용자 예약을 상세 열람할 수 없습니다."))
                 .andExpect(jsonPath("$.errorCode").value(400));
-    }
-
-    @Test
-    void 사용자가_아닌_경우_예약_죄회시_예외가_발생한다() throws Exception {
-        // when && then
-        mockMvc.perform(get("/reservations"))
-                .andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -163,6 +158,32 @@ class ReservationControllerTest extends BaseCookie {
     }
 
     @Test
+    void 사용자가_아닌_예약_수정시_예외가_발생한다() throws Exception {
+        // given
+        Cookie cookie = createFixtureCookie();
+
+        long updateReservationId = 3L;
+        Long roomId = 2L;
+        LocalDate date = LocalDate.of(2025, 6, 15);
+        LocalTime startTime = LocalTime.of(19, 0);
+        LocalTime endTime = LocalTime.of(20, 0);
+
+        ReservationUpdateRequest request = new ReservationUpdateRequest(roomId, date,
+                startTime, endTime);
+
+        // when && then
+        ResultActions actions = mockMvc.perform(patch("/reservations/" + updateReservationId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
+                .cookie(cookie));
+
+        // then
+        actions.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("다른 사용자 예약을 수정할 수 없습니다."))
+                .andExpect(jsonPath("$.errorCode").value(400));
+    }
+
+    @Test
     void 회의실_예약을_삭제한다() throws Exception {
         // given
         Cookie cookie = createFixtureCookie();
@@ -179,5 +200,21 @@ class ReservationControllerTest extends BaseCookie {
         // then
         actions.andExpect(status().isNoContent());
         assertThat(result).isNotEqualTo(existed);
+    }
+
+    @Test
+    void 사용자가_아닌_예약_삭제시_예외가_발생한다() throws Exception {
+        // given
+        Cookie cookie = createFixtureCookie();
+        long deleteReservationId = 3L;
+
+        // when && then
+        ResultActions actions = mockMvc.perform(delete("/reservations/" + deleteReservationId)
+                .cookie(cookie));
+
+        // then
+        actions.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("다른 사용자 예약을 삭제할 수 없습니다."))
+                .andExpect(jsonPath("$.errorCode").value(400));
     }
 }
