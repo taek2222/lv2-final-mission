@@ -11,6 +11,7 @@ import finalmission.domain.Room;
 import finalmission.infrastructure.MailClient;
 import finalmission.repository.ReservationRepository;
 import finalmission.repository.RoomRepository;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,9 +42,9 @@ public class ReservationService {
     public ReservationResponse registerReservation(Member member, ReservationRequest request) {
         Room room = getRoomById(request.roomId());
         Reservation reservation = request.toReservation(member, room);
-        reservationRepository.save(reservation);
+        validateReservationLimit(member.getId(), reservation.getDate());
 
-        validateReservationLimit(member, reservation);
+        reservationRepository.save(reservation);
 
         mailClient.sendReservationMail(reservation);
         return new ReservationResponse(reservation);
@@ -55,6 +56,7 @@ public class ReservationService {
             Member member
     ) {
         Reservation reservation = getReservationById(reservationId);
+        validateReservationLimit(member.getId(), request.date());
 
         String errorMessage = "다른 사용자 예약을 수정할 수 없습니다.";
         validateDifferentMember(reservation.getMember(), member, errorMessage);
@@ -78,11 +80,10 @@ public class ReservationService {
         reservationRepository.deleteById(reservationId);
     }
 
-    private void validateReservationLimit(Member member, Reservation reservation) {
-        List<Reservation> reservations = reservationRepository.findAllByMemberIdAndDate(member.getId(),
-                reservation.getDate());
+    private void validateReservationLimit(Long memberId, LocalDate date) {
+        List<Reservation> reservations = reservationRepository.findAllByMemberIdAndDate(memberId, date);
 
-        if (reservations.size() >= 3) {
+        if (reservations.size() >= 2) {
             throw new IllegalArgumentException("같은 날 3개 이상 회의실을 예약할 수 없습니다.");
         }
     }
