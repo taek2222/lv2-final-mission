@@ -65,6 +65,10 @@ public class ReservationService {
         return new ReservationResponse(reservation);
     }
 
+    public void deleteReservation(Long reservationId, Member member) {
+        reservationRepository.deleteById(reservationId);
+    }
+
     private Reservation getReservationById(Long reservationId) {
         return reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new RuntimeException()); // todo : 커스텀 예외 추가

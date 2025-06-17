@@ -10,6 +10,7 @@ import finalmission.global.config.AuthenticationPrincipal;
 import finalmission.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,5 +56,14 @@ public class ReservationController {
             @AuthenticationPrincipal Member member
     ) {
         return reservationService.updateReservation(reservationId, request, member);
+    }
+
+    @DeleteMapping("/{reservationId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteReservation(
+            @PathVariable Long reservationId,
+            @AuthenticationPrincipal Member member
+    ) {
+        reservationService.deleteReservation(reservationId, member);
     }
 }
