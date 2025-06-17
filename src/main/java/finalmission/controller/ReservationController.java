@@ -3,6 +3,7 @@ package finalmission.controller;
 import finalmission.controller.dto.ReservationDetailResponse;
 import finalmission.controller.dto.ReservationRequest;
 import finalmission.controller.dto.ReservationResponse;
+import finalmission.controller.dto.ReservationResponses;
 import finalmission.domain.Member;
 import finalmission.global.AuthenticationPrincipal;
 import finalmission.service.ReservationService;
@@ -29,8 +30,11 @@ public class ReservationController {
     }
 
     @GetMapping("/{reservationId}")
-    public ReservationDetailResponse getDetailReservation(@PathVariable Long reservationId) {
-        return reservationService.getReservationById(reservationId);
+    public ReservationDetailResponse getDetailReservation(
+            @PathVariable Long reservationId,
+            @AuthenticationPrincipal Member member
+    ) {
+        return reservationService.getDetailReservationById(reservationId, member);
     }
 
     @PostMapping
