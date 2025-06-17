@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -56,8 +57,20 @@ public class Reservation {
     }
 
     private void validateTime(LocalTime startTime, LocalTime endTime) {
+        validateTimeUnit(startTime, endTime);
+        validateTimeRange(startTime, endTime);
+    }
+
+    private void validateTimeUnit(LocalTime startTime, LocalTime endTime) {
         if (startTime.getMinute() % 10 != 0 || endTime.getMinute() % 10 != 0) {
             throw new IllegalArgumentException("예약 시간은 10분 단위만 가능합니다.");
+        }
+    }
+
+    private void validateTimeRange(LocalTime startTime, LocalTime endTime) {
+        Duration between = Duration.between(startTime, endTime);
+        if (between.toMinutes() > 60) {
+            throw new IllegalArgumentException("예약 시간은 1시간을 초과할 수 없습니다.");
         }
     }
 
