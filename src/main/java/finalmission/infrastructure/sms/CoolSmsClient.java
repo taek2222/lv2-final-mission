@@ -1,4 +1,4 @@
-package finalmission.infrastructure;
+package finalmission.infrastructure.sms;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

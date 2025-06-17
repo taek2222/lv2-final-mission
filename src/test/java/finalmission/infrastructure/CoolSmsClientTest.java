@@ -3,6 +3,7 @@ package finalmission.infrastructure;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 import finalmission.domain.Reservation;
+import finalmission.infrastructure.sms.CoolSmsClient;
 import finalmission.repository.ReservationRepository;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

@@ -1,5 +1,6 @@
 package finalmission.global;
 
+import finalmission.infrastructure.sms.CoolSmsAuthorizationInterceptor;
 import java.util.Base64;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

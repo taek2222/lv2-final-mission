@@ -1,4 +1,4 @@
-package finalmission.global;
+package finalmission.infrastructure.sms;
 
 import java.time.Instant;
 import java.util.UUID;
