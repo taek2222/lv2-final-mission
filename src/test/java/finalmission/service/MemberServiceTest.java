@@ -28,6 +28,19 @@ class MemberServiceTest {
         // when && then
         assertThatCode(() -> memberService.signup(request))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("중복된 이메일이 존재합니다. 다른 이메일을 이용해 주세요.");
+                .hasMessage("이미 가입된 이메일이 존재합니다. 다른 이메일을 이용해 주세요.");
+    }
+
+    @Test
+    void 회원가입시_중복되는_전화번호인_경우_예외가_발생한다() {
+        // given
+        memberRepository.save(new Member("test1", "test1@email.com", "password", "01012345678"));
+
+        MemberSignupRequest request = new MemberSignupRequest("test2", "test2@email.com", "password", "01012345678");
+
+        // when && then
+        assertThatCode(() -> memberService.signup(request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이미 가입된 전화번호가 존재합니다. 다른 전화번호를 이용해 주세요.");
     }
 }
