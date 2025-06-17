@@ -4,12 +4,14 @@ import finalmission.controller.dto.ReservationDetailResponse;
 import finalmission.controller.dto.ReservationRequest;
 import finalmission.controller.dto.ReservationResponse;
 import finalmission.controller.dto.ReservationResponses;
+import finalmission.controller.dto.ReservationUpdateRequest;
 import finalmission.domain.Member;
 import finalmission.global.config.AuthenticationPrincipal;
 import finalmission.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,5 +46,14 @@ public class ReservationController {
             @RequestBody ReservationRequest request
     ) {
         return reservationService.registerReservation(member, request);
+    }
+
+    @PatchMapping("/{reservationId}")
+    public ReservationResponse updateReservation(
+            @PathVariable Long reservationId,
+            @RequestBody ReservationUpdateRequest request,
+            @AuthenticationPrincipal Member member
+    ) {
+        return reservationService.updateReservation(reservationId, request, member);
     }
 }

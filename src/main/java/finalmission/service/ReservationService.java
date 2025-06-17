@@ -4,6 +4,7 @@ import finalmission.controller.dto.ReservationDetailResponse;
 import finalmission.controller.dto.ReservationRequest;
 import finalmission.controller.dto.ReservationResponse;
 import finalmission.controller.dto.ReservationResponses;
+import finalmission.controller.dto.ReservationUpdateRequest;
 import finalmission.domain.Member;
 import finalmission.domain.Reservation;
 import finalmission.domain.Room;
@@ -42,6 +43,25 @@ public class ReservationService {
         reservationRepository.save(reservation);
 
         mailClient.sendReservationMail(reservation);
+        return new ReservationResponse(reservation);
+    }
+
+    public ReservationResponse updateReservation(
+            Long reservationId,
+            ReservationUpdateRequest request,
+            Member member
+    ) {
+        Reservation reservation = getReservationById(reservationId);
+        validateDifferentMember(reservation.getMember(), member);
+
+        Room room = getRoomById(request.roomId());
+        reservation.update(
+                room,
+                request.date(),
+                request.startTime(),
+                request.endTime()
+        );
+
         return new ReservationResponse(reservation);
     }
 

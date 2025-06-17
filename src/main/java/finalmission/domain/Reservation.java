@@ -47,6 +47,13 @@ public class Reservation {
         this.endTime = endTime;
     }
 
+    public void update(Room room, LocalDate date, LocalTime startTime, LocalTime endTime) {
+        this.room = room;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
     public String getStartTime(DateTimeFormatter formatter) {
         return startTime.format(formatter);
     }
