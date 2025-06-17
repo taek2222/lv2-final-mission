@@ -87,7 +87,8 @@ class ReservationControllerTest extends BaseCookie {
         mockMvc.perform(get("/reservations/" + reservationId)
                         .cookie(cookie))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("다른 사용자 예약을 상세 열람할 수 없습니다."));
+                .andExpect(jsonPath("$.message").value("다른 사용자 예약을 상세 열람할 수 없습니다."))
+                .andExpect(jsonPath("$.errorCode").value(400));
     }
 
     @Test
