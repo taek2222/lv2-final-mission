@@ -32,7 +32,7 @@ public class MemberService {
     }
 
     private void validatePassword(MemberLoginRequest request, Member member) {
-        if (!member.isSamePassword(request.password())) {
+        if (!member.matchesPassword(request.password())) {
             throw new IllegalArgumentException("이메일 및 비밀번호가 일치하지 않습니다.");
         }
     }

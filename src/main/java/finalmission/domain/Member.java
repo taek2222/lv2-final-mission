@@ -41,7 +41,7 @@ public class Member {
         this.id = id;
     }
 
-    public boolean isSamePassword(String password) {
+    public boolean matchesPassword(String password) {
         return this.password.equals(password);
     }
 
