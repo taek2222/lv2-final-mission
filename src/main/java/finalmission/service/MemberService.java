@@ -15,6 +15,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public MemberResponse signup(MemberSignupRequest request) {
+        validateDuplicateEmail(request.email());
+        validateDuplicatePhoneNumber(request.phoneNumber());
+
         Member member = request.toMember();
         memberRepository.save(member);
         return new MemberResponse(member);
@@ -24,6 +27,18 @@ public class MemberService {
         Member member = getMemberByEmail(request.email());
         validatePassword(request, member);
         return member;
+    }
+
+    private void validateDuplicateEmail(String email) {
+        if (memberRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("이미 가입된 이메일이 존재합니다. 다른 이메일을 이용해 주세요.");
+        }
+    }
+
+    private void validateDuplicatePhoneNumber(String phoneNumber) {
+        if (memberRepository.existsByPhoneNumber(phoneNumber)) {
+            throw new IllegalArgumentException("이미 가입된 전화번호가 존재합니다. 다른 전화번호를 이용해 주세요.");
+        }
     }
 
     private Member getMemberByEmail(String email) {
