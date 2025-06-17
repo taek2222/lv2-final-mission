@@ -6,9 +6,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Room {
 
     @Id
@@ -17,4 +19,8 @@ public class Room {
 
     @Column(nullable = false)
     private String name;
+
+    public Room(String name) {
+        this.name = name;
+    }
 }
