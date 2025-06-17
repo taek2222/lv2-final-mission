@@ -42,7 +42,16 @@ public class ReservationService {
     public ReservationResponse registerReservation(Member member, ReservationRequest request) {
         Room room = getRoomById(request.roomId());
         Reservation reservation = request.toReservation(member, room);
+
         validateReservationLimit(member.getId(), reservation.getDate());
+
+        List<Reservation> reservations = reservationRepository.findAllByDate(request.date());
+        boolean match = reservations.stream()
+                .anyMatch(reservation1 -> reservation1.isDuplicateTime(request.startTime(), request.endTime()));
+
+        if (match) {
+            throw new IllegalArgumentException("이미 예약된 시간입니다. 다른 시간을 이용해 주세요.");
+        }
 
         reservationRepository.save(reservation);
 

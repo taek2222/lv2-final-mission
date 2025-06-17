@@ -49,6 +49,10 @@ public class Reservation {
         this.endTime = endTime;
     }
 
+    public boolean isDuplicateTime(LocalTime startTime, LocalTime endTime) {
+        return !(!endTime.isAfter(this.startTime) || !startTime.isBefore(this.endTime));
+    }
+
     public void update(Room room, LocalDate date, LocalTime startTime, LocalTime endTime) {
         this.room = room;
         this.date = date;
