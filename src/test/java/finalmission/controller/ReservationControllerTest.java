@@ -2,6 +2,7 @@ package finalmission.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,9 +31,30 @@ class ReservationControllerTest extends BaseCookie {
 
     @Autowired
     private ObjectMapper objectMapper;
-    
+
     @MockitoBean
     private MailClient mailClient;
+
+    @Test
+    void 모든_예약_현황을_반환한다() throws Exception {
+        // given
+        Cookie cookie = createFixtureCookie();
+
+        // when && then
+        mockMvc.perform(get("/reservations")
+                        .cookie(cookie))
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].room").value("어드레스룸"))
+                .andExpect(jsonPath("$[0].date").value("2025-06-15"))
+                .andExpect(jsonPath("$[0].startTime").value("19:00"))
+                .andExpect(jsonPath("$[0].endTime").value("20:00"))
+                .andExpect(jsonPath("$[1].id").value(1))
+                .andExpect(jsonPath("$[1].room").value("백스윙룸"))
+                .andExpect(jsonPath("$[1].date").value("2025-06-16"))
+                .andExpect(jsonPath("$[1].startTime").value("20:00"))
+                .andExpect(jsonPath("$[1].endTime").value("21:00"))
+        ;
+    }
 
     @Test
     void 성공적으로_회의실을_예약한_후_정보를_반환한다() throws Exception {
