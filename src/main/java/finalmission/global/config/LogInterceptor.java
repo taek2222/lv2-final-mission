@@ -30,6 +30,6 @@ public class LogInterceptor implements HandlerInterceptor {
         int status = response.getStatus();
         String ip = request.getRemoteAddr();
 
-        log.info("[요청 결과] URI: {}, 상태: {}, IP: {}, 소요 시간: {}", uri, status, ip, processedTime);
+        log.info("[요청 결과] URI: {}, 상태: {}, IP: {}, 소요 시간: {}ms", uri, status, ip, processedTime);
     }
 }
