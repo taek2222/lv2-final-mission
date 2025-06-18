@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/members")
 @RequiredArgsConstructor
-public class MemberController {
+public class MemberController implements MemberControllerSwagger {
 
     private final MemberService memberService;
     private final JwtTokenProvider tokenProvider;
@@ -45,3 +45,5 @@ public class MemberController {
         cookieManager.setTokenCookie(response, token);
     }
 }
+
+
