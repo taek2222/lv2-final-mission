@@ -10,6 +10,7 @@ import finalmission.controller.dto.ReservationUpdateRequest;
 import finalmission.domain.Member;
 import finalmission.domain.Reservation;
 import finalmission.domain.Room;
+import finalmission.global.config.ExecutionTimeAnnotation;
 import finalmission.infrastructure.MailGunClient;
 import finalmission.repository.ReservationRepository;
 import finalmission.repository.RoomRepository;
@@ -29,6 +30,7 @@ public class ReservationService {
     private final RoomRepository roomRepository;
     private final MailGunClient mailClient;
 
+    @ExecutionTimeAnnotation
     public ReservationResponses getAllReservation() {
         List<ReservationResponse> responses = reservationRepository.findAll().stream()
                 .map(ReservationResponse::new)
@@ -59,6 +61,7 @@ public class ReservationService {
         return new ReservationResponse(reservation);
     }
 
+    @ExecutionTimeAnnotation
     public ReservationResponse updateReservation(
             Long reservationId,
             ReservationUpdateRequest request,
