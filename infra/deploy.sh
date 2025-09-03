@@ -18,7 +18,7 @@ fi
 
 echo "▶️ 새로운 Spring WAS 실행 중..."
 if [ -f "$JAR_NAME" ]; then
-  nohup java -jar -Duser.timezone=Asia/Seoul "$JAR_NAME" --spring.profiles.active=dev &
+  nohup java -jar -Duser.timezone=Asia/Seoul "$JAR_NAME" --spring.profiles.active=$SPRING_PROFILE &
   echo "📦 실행 파일: $JAR_NAME"
 else
   echo "❌ 오류: $APP_HOME 경로에서 JAR 파일을 찾을 수 없습니다."
