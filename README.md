@@ -54,35 +54,38 @@ CloudWatch를 통한 서버 모니터링과 Swagger 기반의 API 문서화를 �
 
 ```mermaid
 flowchart LR
-    subgraph Dev[EC2 Dev]
+    subgraph CI_CD["CodePipeline"]
+        Source[GitHub]
+        Build[CodeBuild]
+        DeployDev[CodeDeploy Dev]
+        DeployProd[CodeDeploy Prod]
+    end
+
+    subgraph Dev["EC2 Dev"]
         DApp[Spring Boot]
         DDB[(MySQL)]
     end
 
-    subgraph Prod[EC2 Prod]
+    subgraph Prod["EC2 Prod"]
         PApp[Spring Boot]
     end
 
-    subgraph DB[EC2 DB]
+    subgraph DB["EC2 DB"]
         MySQL[(MySQL)]
     end
 
-    Dev --> DDB
-    PApp --> MySQL
-
-    subgraph CI/CD[CodePipeline]
-        Source[GitHub]
-        Build[CodeBuild]
-        Deploy[CodeDeploy]
-    end
-
-    Source --> Build --> Deploy --> PApp
-
-    subgraph Monitoring[CloudWatch]
+    subgraph Monitoring["CloudWatch"]
         CPU[CPU]
         Net[Network]
         Mem[Memory]
     end
 
+    Source --> Build
+    Build --> DeployDev --> DApp
+    Build --> DeployProd --> PApp
+
+    DApp --> DDB
+    PApp --> MySQL
     PApp --> Monitoring
+
 ```
