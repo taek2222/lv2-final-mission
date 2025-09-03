@@ -4,7 +4,7 @@ JAR_NAME=$(find $APP_HOME -name "*.jar" | head -n 1)
 echo "🚀========== 배포 스크립트 시작 =========="
 
 echo "🛑 기존 Spring WAS 종료 중..."
-PID=$(lsof -t -i:80 || true)
+PID=$(lsof -t -i:8080 || true)
 if [ -n "$PID" ]; then
   kill -SIGTERM $PID
   sleep 5
@@ -13,7 +13,7 @@ if [ -n "$PID" ]; then
     kill -9 $PID
   fi
 else
-  echo "✅ 80 포트에서 실행 중인 프로세스가 없습니다."
+  echo "✅ 8080 포트에서 실행 중인 프로세스가 없습니다."
 fi
 
 echo "▶️ 새로운 Spring WAS 실행 중..."
